@@ -6,10 +6,15 @@ const fileUpload = require('express-fileupload');
 
 const app = express();
 
+try{
 const result = dotenv.config({ path: path.join(__dirname, './', '../', '.env') });
 if (result.error) {
     throw result.error;
+}    
+}catch(e){
+    console.log(e);
 }
+
 
 app.use(cors());
 app.use(express.json());
