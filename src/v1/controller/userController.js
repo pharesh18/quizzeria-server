@@ -508,6 +508,7 @@ const editProfile = async (req, res) => {
         if (data) {
             delete data._doc["password"];
             delete data._doc["profile_id"];
+            data._doc['accesstoken'] = generateToken(data._doc._id);
             res.send({ error: false, message: "Profile updated successfully!!", data: data });
         } else {
             res.send({ error: true, message: "Something went wrong" });
