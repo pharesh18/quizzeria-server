@@ -6,7 +6,7 @@ const fileUpload = require('express-fileupload');
 
 const app = express();
 
-const result = dotenv.config({ path: path.join(__dirname, '../', '.env') });
+const result = dotenv.config({ path: path.join(__dirname, './', '../', '.env') });
 if (result.error) {
     throw result.error;
 }
