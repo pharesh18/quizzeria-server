@@ -12,14 +12,8 @@ const validateSchema = (req, res, next) => {
     }
     
     const schema = joi.object({
-        _id: joi.string().required().messages({
-            'any.required': "Something_broken! Please try again!!",
-            'string.empty': "Something_broken! Please try again!!",
-        }),
-        accesstoken: joi.string().required().messages({
-            'any.required': "Something_broken! Please try again!!",
-            'string.empty': "Something_broken! Please try again!!",
-        }),
+        _id: joi.string().required(),
+        accesstoken: joi.string().required(),
     });
 
     const headers = {
