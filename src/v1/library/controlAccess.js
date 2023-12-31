@@ -10,12 +10,7 @@ const validateSchema = (req, res, next) => {
         next();
         return true;
     }
-
-    // const schema = joi.object({
-    //     _id: joi.string().required(),
-    //     accesstoken: joi.string().required()
-    // });
-
+    
     const schema = joi.object({
         _id: joi.string().required().messages({
             'any.required': "Something_broken! Please try again!!",
@@ -27,7 +22,12 @@ const validateSchema = (req, res, next) => {
         }),
     });
 
-    if (!validateRequest(req.headers, res, next, schema)) {
+    const headers = {
+        _id: req.headers._id,
+        accesstoken: req.headers.accesstoken
+    }
+
+    if (!validateRequest(headers, res, next, schema)) {
         return false;
     }
 }
