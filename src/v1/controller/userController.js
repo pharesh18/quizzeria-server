@@ -190,8 +190,8 @@ const registerUser = async (req, res) => {
         let user = new users(data);
         return await user.save().then(async () => {
             let text = `Dear ${data.fname} ${data.lname}, Here is your OTP to register on Quizzeria Web Application is ${otp}`;
-            // let result = await sendEmail(data.email, "OTP from Quiz Web Application", text);
-            // console.log(result);
+            let result = await sendEmail(data.email, "OTP from Quiz Web Application", text);
+            console.log(result);
             return_data.email = data.email;
             res.send(return_data);
         }).catch((error) => {
