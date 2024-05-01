@@ -24,25 +24,25 @@ const validateUserSchema = (req, res, next) => {
     };
 
     const userSchema = joi.object({
-        fname: joi.string().required().pattern(/^[a-zA-Z ]+$/).message('fname can only have alphabets').min(2).max(20).messages({
-            'string.empty': "fname is a required field",
-            'string.min': "fname must have atleast 2 characters",
-            'string.max': "fname cannot have more than 20 characters"
+        fname: joi.string().required().pattern(/^[a-zA-Z]+$/).message('firstname can only have alphabets').min(2).max(20).messages({
+            'string.empty': "first name is a required field",
+            'string.min': "first name must have atleast 2 characters",
+            'string.max': "first name cannot have more than 30 characters"
         }),
-        lname: joi.string().required().pattern(/^[a-zA-Z ]+$/).message('lname can only have alphabets').min(2).max(20).messages({
-            'string.empty': "lname is a required field",
-            'string.min': "lname must have atleast 2 characters",
-            'string.max': "lname cannot have more than 20 characters"
+        lname: joi.string().required().pattern(/^[a-zA-Z ]+$/).message('lastname can only have alphabets').min(2).max(20).messages({
+            'string.empty': "last name is a required field",
+            'string.min': "last name must have atleast 2 characters",
+            'string.max': "last name cannot have more than 30 characters"
         }),
         email: joi.string().required().email().messages({
             'any.required': "email is required field",
             'string.empty': "email is a required field",
-            'string.email': "Please enter valid email"
+            'string.email': "Please enter valid email",  
         }),
-        password: joi.string().required().min(6).max(16).pattern(/^[a-zA-Z0-9@#$%^&-=+()]+$/).message("Only use alphabets, numbers or special characters").messages({
+        password: joi.string().required().min(6).max(16).pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,16}$/).message("Password must have atleast: One lowercase letter, One uppercase letter, One number and, One special character").messages({
             'string.empty': "password is a required field",
             'string.min': "password must have atleast 6 characters",
-            'string.max': "password cannot have more than 20 characters"
+            'string.max': "password cannot have more than 16 characters"
         }),
     });
 
@@ -61,6 +61,7 @@ const validateUserSchema = (req, res, next) => {
         return res.send({ error: true, message: userSchemaError ? userSchemaError.message : userProfileError.message });
     } else {
         next();
+        //console.log(req.body)
     }
 }
 
@@ -168,7 +169,7 @@ const registerUser = async (req, res) => {
 
                 let user = new users(data);
                 return await user.save().then(async () => {
-                    let text = `Dear ${data.fname} ${data.lname}, Here is your OTP to register on Quizzeria Web Application is ${otp}`;
+                    let text = `Dear ${data.fname} ${data.lname}, Your OTP to register on Quizzeria Web Application is ${otp}`;
                     let result = await sendEmail(data.email, "OTP from Quizzeria Web Application", text);
                     // console.log(result);
                     return_data.email = data.email;
@@ -189,7 +190,7 @@ const registerUser = async (req, res) => {
     } else {
         let user = new users(data);
         return await user.save().then(async () => {
-            let text = `Dear ${data.fname} ${data.lname}, Here is your OTP to register on Quizzeria Web Application is ${otp}`;
+            let text = `Dear ${data.fname} ${data.lname}, Your OTP to register on Quizzeria Web Application is ${otp}`;
             let result = await sendEmail(data.email, "OTP from Quiz Web Application", text);
             console.log(result);
             return_data.email = data.email;

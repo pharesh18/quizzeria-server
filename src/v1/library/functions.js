@@ -30,7 +30,6 @@ const validateRequest = (reqSchema, res, next, schema) => {
     };
 
     const { error, value } = schema.validate(reqSchema, option);
-    console.log(error);
     if (error) {
         res.send({ error: true, message: error.message });
         return false;

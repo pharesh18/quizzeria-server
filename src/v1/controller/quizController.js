@@ -182,7 +182,35 @@ const getLeaderboardData = async (req, res) => {
 
     if (difficulty === "All") {
         const difficultyArr = ['easy', 'medium', 'hard'];
-        const promises = [];
+
+        // for (const diff of difficultyArr) {
+        //     try {
+        //         const highestMarks = await quizzes.find({ category, difficulty: diff, type }).sort({ score: -1 }).limit(1);
+
+        //         if (highestMarks?.length > 0) {
+        //             const resArray = await quizzes.find({ category, difficulty: diff, type, score: highestMarks[0]?.score });
+
+        //             if (resArray.length > 0) {
+        //                 const userData = await users.find({ _id: resArray[0]?.user_id });
+        //                 const data = {
+        //                     _id: resArray[0]?._id,
+        //                     user_id: userData[0]?._id,
+        //                     fname: userData[0]?.fname,
+        //                     lname: userData[0]?.lname,
+        //                     email: userData[0]?.email,
+        //                     category: resArray[0]?.category,
+        //                     difficulty: resArray[0]?.difficulty,
+        //                     type: resArray[0]?.type,
+        //                     score: resArray[0]?.score,
+        //                     total_questions: resArray[0]?.total_questions,
+        //                 };
+        //                 returnData.push(data);
+        //             }
+        //         }
+        //     } catch (err) {
+        //         throw err;
+        //     }
+        // }
 
         for (const diff of difficultyArr) {
             try {
@@ -192,20 +220,22 @@ const getLeaderboardData = async (req, res) => {
                     const resArray = await quizzes.find({ category, difficulty: diff, type, score: highestMarks[0]?.score });
 
                     if (resArray.length > 0) {
-                        const userData = await users.find({ _id: resArray[0]?.user_id });
-                        const data = {
-                            _id: resArray[0]?._id,
-                            user_id: userData[0]?._id,
-                            fname: userData[0]?.fname,
-                            lname: userData[0]?.lname,
-                            email: userData[0]?.email,
-                            category: resArray[0]?.category,
-                            difficulty: resArray[0]?.difficulty,
-                            type: resArray[0]?.type,
-                            score: resArray[0]?.score,
-                            total_questions: resArray[0]?.total_questions,
-                        };
-                        returnData.push(data);
+                        for (const quiz of resArray) {
+                            const user = await users.find({ _id: quiz.user_id });
+                            const data = {
+                                _id: quiz._id,
+                                user_id: user[0]?._id,
+                                fname: user[0]?.fname,
+                                lname: user[0]?.lname,
+                                email: user[0]?.email,
+                                category: quiz.category,
+                                difficulty: quiz.difficulty,
+                                type: quiz.type,
+                                score: quiz.score,
+                                total_questions: quiz.total_questions,
+                            };
+                            returnData.push(data);
+                        }    
                     }
                 }
             } catch (err) {
